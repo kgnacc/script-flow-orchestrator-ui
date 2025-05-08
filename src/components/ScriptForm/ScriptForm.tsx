@@ -60,28 +60,28 @@ const ScriptForm: React.FC = () => {
   };
 
   return (
-    <div className="script-form-container p-6">
-      <h2 className="text-2xl font-bold mb-6 flex items-center">
+    <div className="script-form-container p-4 max-h-[calc(100vh-4rem)] overflow-hidden">
+      <h2 className="text-xl font-bold mb-4 flex items-center">
         {getScriptIcon()}
         {selectedScript.name}
       </h2>
       
       <Tabs value={currentStep} onValueChange={(value) => setCurrentStep(value as FormStep)}>
-        <TabsList className="mb-8">
-          <TabsTrigger value="info" disabled={currentStep !== 'info'}>
+        <TabsList className="mb-4 w-full">
+          <TabsTrigger value="info" disabled={currentStep !== 'info'} className="flex-1">
             1. Script Information
           </TabsTrigger>
-          <TabsTrigger value="action" disabled={currentStep === 'info'}>
+          <TabsTrigger value="action" disabled={currentStep === 'info'} className="flex-1">
             2. Action & Parameters
           </TabsTrigger>
-          <TabsTrigger value="confirm" disabled={currentStep !== 'confirm'}>
+          <TabsTrigger value="confirm" disabled={currentStep !== 'confirm'} className="flex-1">
             3. Confirm & Execute
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="info">
+        <TabsContent value="info" className="mt-0">
           <MetaInfo script={selectedScript} />
-          <div className="mt-6 flex justify-end">
+          <div className="mt-4 flex justify-end">
             <Button 
               onClick={() => setCurrentStep('action')}
               className="px-4 py-2"
@@ -91,9 +91,9 @@ const ScriptForm: React.FC = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="action">
+        <TabsContent value="action" className="mt-0">
           <ActionForm script={selectedScript} onNext={handleActionFormNext} />
-          <div className="mt-6 flex justify-start">
+          <div className="mt-4 flex justify-start">
             <Button 
               variant="outline"
               onClick={handleBackToInfo}
@@ -104,7 +104,7 @@ const ScriptForm: React.FC = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="confirm">
+        <TabsContent value="confirm" className="mt-0">
           {selectedAction && (
             <ConfirmationView 
               formData={formData}

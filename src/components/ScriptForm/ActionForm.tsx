@@ -13,6 +13,9 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/AppContext';
 import { toast } from 'sonner';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ActionFormProps {
   script: Script;
@@ -22,6 +25,7 @@ interface ActionFormProps {
 const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
   const { selectedAction, setSelectedAction } = useAppContext();
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const isMobile = useIsMobile();
   
   // Handle action selection
   const handleActionChange = (actionId: string) => {
@@ -178,31 +182,28 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
           />
         );
       case 'multiselect':
-        // For multiselect, we'll use checkbox group
+        // For multiselect, we'll use radio group instead of checkboxes for better space usage
         return (
           <Controller
             name={parameter.id}
             control={control}
             defaultValue={parameter.default as string[] || []}
             render={({ field }) => (
-              <div className="space-y-2">
-                {parameter.options?.map(option => (
-                  <div key={option.value} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`${parameter.id}-${option.value}`}
-                      checked={field.value?.includes(option.value)}
-                      onCheckedChange={(checked) => {
-                        const currentValues = field.value || [];
-                        if (checked) {
-                          field.onChange([...currentValues, option.value]);
-                        } else {
-                          field.onChange(currentValues.filter(val => val !== option.value));
-                        }
-                      }}
-                    />
-                    <Label htmlFor={`${parameter.id}-${option.value}`}>{option.label}</Label>
-                  </div>
-                ))}
+              <div className="space-y-1">
+                <RadioGroup 
+                  className="flex flex-wrap gap-2"
+                  value={field.value?.[0] || ''}
+                  onValueChange={(value) => field.onChange([value])}
+                >
+                  {parameter.options?.map(option => (
+                    <div key={option.value} className="flex items-center space-x-1">
+                      <RadioGroupItem value={option.value} id={`${parameter.id}-${option.value}`} />
+                      <Label htmlFor={`${parameter.id}-${option.value}`} className="text-sm">
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
             )}
           />
@@ -218,7 +219,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
                 {...field} 
                 placeholder={parameter.label}
                 className="w-full"
-                rows={4}
+                rows={2} // Reduced from 4 to 2 for better space usage
               />
             )}
           />
@@ -230,12 +231,12 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
 
   return (
     <div>
-      <Card className="mb-6">
-        <CardHeader>
+      <Card className="mb-4">
+        <CardHeader className="py-3">
           <CardTitle>Select Action</CardTitle>
           <CardDescription>Choose the action to perform with this script</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="py-2">
           <Select 
             onValueChange={handleActionChange}
             value={selectedAction?.id || ''}
@@ -257,27 +258,29 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
       {selectedAction && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Card>
-            <CardHeader>
+            <CardHeader className="py-3">
               <CardTitle>{selectedAction.name} Parameters</CardTitle>
               <CardDescription>{selectedAction.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {selectedAction.parameters.map(param => (
-                  <div key={param.id} className="space-y-2">
-                    <Label htmlFor={param.id}>
-                      {param.label} {param.required && <span className="text-red-500">*</span>}
-                    </Label>
-                    {renderParameterInput(param)}
-                    {errors[param.id] && (
-                      <p className="text-sm text-red-500">
-                        {errors[param.id]?.message?.toString()}
-                      </p>
-                    )}
-                  </div>
-                ))}
-                <Button type="submit" className="w-full mt-4">Continue</Button>
-              </div>
+              <ScrollArea className="h-[calc(100vh-28rem)] pr-4">
+                <div className={`grid ${selectedAction.parameters.length > 3 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
+                  {selectedAction.parameters.map(param => (
+                    <div key={param.id} className="space-y-1">
+                      <Label htmlFor={param.id} className="text-sm">
+                        {param.label} {param.required && <span className="text-red-500">*</span>}
+                      </Label>
+                      {renderParameterInput(param)}
+                      {errors[param.id] && (
+                        <p className="text-xs text-red-500">
+                          {errors[param.id]?.message?.toString()}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+              <Button type="submit" className="w-full mt-4">Continue</Button>
             </CardContent>
           </Card>
         </form>
