@@ -85,6 +85,7 @@ const ScriptForm: React.FC = () => {
             <Button 
               onClick={() => setCurrentStep('action')}
               className="px-4 py-2"
+              // No specific validation on this screen, but we could disable if needed
             >
               Next: Configure Action
             </Button>

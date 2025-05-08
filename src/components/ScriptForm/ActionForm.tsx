@@ -85,9 +85,10 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
 
   // Create form with the dynamic schema
   const dynamicSchema = createDynamicSchema(selectedAction);
-  const { control, handleSubmit, formState: { errors } } = useForm<Record<string, any>>({
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<Record<string, any>>({
     resolver: zodResolver(dynamicSchema),
     defaultValues: formData,
+    mode: 'onChange', // This will validate on change to enable/disable button appropriately
   });
 
   const onSubmit = (data: Record<string, any>) => {
@@ -280,7 +281,13 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
                   ))}
                 </div>
               </ScrollArea>
-              <Button type="submit" className="w-full mt-4">Continue</Button>
+              <Button 
+                type="submit" 
+                className="w-full mt-4"
+                disabled={!isValid || !selectedAction}
+              >
+                Continue
+              </Button>
             </CardContent>
           </Card>
         </form>
