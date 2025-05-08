@@ -7,6 +7,7 @@ import ActionForm from './ActionForm';
 import ConfirmationView from './ConfirmationView';
 import CLIOutput from '../CLIOutput';
 import { Server, Terminal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 // Step definition
 type FormStep = 'info' | 'action' | 'confirm';
@@ -35,6 +36,10 @@ const ScriptForm: React.FC = () => {
 
   const handleBackToAction = () => {
     setCurrentStep('action');
+  };
+  
+  const handleBackToInfo = () => {
+    setCurrentStep('info');
   };
 
   const handleScriptComplete = () => {
@@ -77,17 +82,26 @@ const ScriptForm: React.FC = () => {
         <TabsContent value="info">
           <MetaInfo script={selectedScript} />
           <div className="mt-6 flex justify-end">
-            <button 
+            <Button 
               onClick={() => setCurrentStep('action')}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="px-4 py-2"
             >
               Next: Configure Action
-            </button>
+            </Button>
           </div>
         </TabsContent>
         
         <TabsContent value="action">
           <ActionForm script={selectedScript} onNext={handleActionFormNext} />
+          <div className="mt-6 flex justify-start">
+            <Button 
+              variant="outline"
+              onClick={handleBackToInfo}
+              className="px-4 py-2"
+            >
+              Back to Information
+            </Button>
+          </div>
         </TabsContent>
         
         <TabsContent value="confirm">
