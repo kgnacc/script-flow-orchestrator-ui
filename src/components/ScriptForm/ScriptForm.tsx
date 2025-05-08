@@ -6,6 +6,7 @@ import MetaInfo from './MetaInfo';
 import ActionForm from './ActionForm';
 import ConfirmationView from './ConfirmationView';
 import CLIOutput from '../CLIOutput';
+import { Server, Terminal } from 'lucide-react';
 
 // Step definition
 type FormStep = 'info' | 'action' | 'confirm';
@@ -46,9 +47,19 @@ const ScriptForm: React.FC = () => {
     setFormData({});
   };
 
+  const getScriptIcon = () => {
+    if (selectedScript.category === 'unix') {
+      return <Terminal className="inline mr-2" />;
+    }
+    return <Server className="inline mr-2" />;
+  };
+
   return (
-    <div className="script-form-container">
-      <h2 className="text-2xl font-bold mb-6">{selectedScript.name}</h2>
+    <div className="script-form-container p-6">
+      <h2 className="text-2xl font-bold mb-6 flex items-center">
+        {getScriptIcon()}
+        {selectedScript.name}
+      </h2>
       
       <Tabs value={currentStep} onValueChange={(value) => setCurrentStep(value as FormStep)}>
         <TabsList className="mb-8">

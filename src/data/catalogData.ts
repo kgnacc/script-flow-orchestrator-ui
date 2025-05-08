@@ -1,4 +1,3 @@
-
 import { Catalog } from '../types/catalog';
 
 export const catalogData: Catalog = {
@@ -377,6 +376,151 @@ export const catalogData: Catalog = {
                     { label: 'Script Scan', value: 'script' },
                     { label: 'Fast Mode', value: 'fast' }
                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'unix',
+      name: 'Generic Unix Commands',
+      scripts: [
+        {
+          id: 'unix-cmds',
+          name: 'Unix Commands',
+          description: 'Execute common Unix commands on target systems',
+          category: 'unix',
+          actions: [
+            {
+              id: 'whoami',
+              name: 'whoami',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Display the effective username of the current user',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                }
+              ]
+            },
+            {
+              id: 'ls',
+              name: 'ls -ltr',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'List directory contents in long format, sorted by modification time',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                },
+                {
+                  id: 'path',
+                  name: 'path',
+                  label: 'Directory Path',
+                  type: 'text',
+                  required: false,
+                  default: '.'
+                }
+              ]
+            },
+            {
+              id: 'hostname',
+              name: 'hostname',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Display the system hostname',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                }
+              ]
+            },
+            {
+              id: 'df',
+              name: 'df -h',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Display disk space usage in human-readable format',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                }
+              ]
+            },
+            {
+              id: 'ps',
+              name: 'ps aux',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Display information about running processes',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                }
+              ]
+            },
+            {
+              id: 'free',
+              name: 'free -m',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Display amount of free and used memory in megabytes',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                }
+              ]
+            },
+            {
+              id: 'custom',
+              name: 'Custom Command',
+              endpoint: '/api/unix/execute',
+              method: 'POST',
+              description: 'Execute a custom unix command',
+              parameters: [
+                {
+                  id: 'hostname',
+                  name: 'hostname',
+                  label: 'Target Host',
+                  type: 'text',
+                  required: true
+                },
+                {
+                  id: 'command',
+                  name: 'command',
+                  label: 'Command',
+                  type: 'text',
+                  required: true,
+                  validation: {
+                    minLength: 1,
+                    errorMessage: 'Command cannot be empty'
+                  }
                 }
               ]
             }
