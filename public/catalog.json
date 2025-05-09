@@ -1,0 +1,173 @@
+
+[
+  {
+    "meta": {
+      "type": "cli",
+      "name": "name1",
+      "category": "cat1",
+      "platforms": ["windows", "Linux"],
+      "description": "This is descr1",
+      "Owner": {
+        "email": "emial1.com",
+        "project": "project1",
+        "team": ["team1", "team2", "team3"],
+        "teamID": 123456,
+        "defineDgroupname": "group1",
+        "defineDgroupname2": "group2"
+      },
+      "path": "node1/cnode1"
+    },
+    "options": [
+      {
+        "action": {
+          "type": "str",
+          "required": "yes",
+          "choices": [
+            "choice1", "choice2", "choice3", "choice4", "choice5", 
+            "choice6", "choice7", "choice8", "choice9", "choice10"
+          ]
+        }
+      },
+      {
+        "eparam": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice2", "choice4"]
+        }
+      },
+      {
+        "e2param": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice1", "choice3"]
+        }
+      },
+      {
+        "cparam": {
+          "type": "str",
+          "required": "no",
+          "define_action_arg": ["choice1", "choice3", "choice2", "choice4"]
+        }
+      },
+      {
+        "rparamet": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice10", "choice8", "choice2", "choice4"]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "name": "choice1",
+        "command": "/a/mycommand1",
+        "actionT": "d"
+      },
+      {
+        "name": "choice2",
+        "command": "/a/mycommand1a2",
+        "actionT": "d"
+      },
+      {
+        "name": "choice3",
+        "command": "/a/mycommand1h3",
+        "actionT": "d"
+      },
+      {
+        "name": "choice4",
+        "command": "/a/mycommandttr4",
+        "actionT": "d"
+      },
+      {
+        "name": "choice5",
+        "command": "/a/mycommand1873",
+        "actionT": "r"
+      }
+    ]
+  },
+  {
+    "meta": {
+      "type": "cli",
+      "name": "namenew2",
+      "category": "cat2",
+      "platforms": ["windows", "Linux"],
+      "description": "This is descr2",
+      "Owner": {
+        "email": "myemial145.com",
+        "project": "project2",
+        "team": ["team1", "team2", "team3"],
+        "teamID": 123456,
+        "defineDgroupname": "group1",
+        "defineDgroupname2": "group2"
+      },
+      "path": "node2/childnodey2"
+    },
+    "options": [
+      {
+        "action": {
+          "type": "str",
+          "required": "yes",
+          "choices": [
+            "choice11", "choice12", "choice13", "choice14", "choice15", 
+            "choice16", "choice17", "choice18", "choice19", "choice10"
+          ]
+        }
+      },
+      {
+        "paramo": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice12", "choice14"]
+        }
+      },
+      {
+        "opoparam": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice11", "choice13"]
+        }
+      },
+      {
+        "carom": {
+          "type": "str",
+          "required": "no",
+          "define_action_arg": ["choice11", "choice13", "choice16"]
+        }
+      },
+      {
+        "parament": {
+          "type": "str",
+          "required": "yes",
+          "define_action_arg": ["choice15", "choice18", "choice12", "choice14", "choice13", "choice16", "choice17", "choice19"]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "name": "choice11",
+        "command": "/a/mycommand1",
+        "actionT": "d"
+      },
+      {
+        "name": "choice12",
+        "command": "/a/mycommand1a2",
+        "actionT": "d"
+      },
+      {
+        "name": "choice13",
+        "command": "/a/mycommand1h3",
+        "actionT": "d"
+      },
+      {
+        "name": "choice14",
+        "command": "/a/mycommandttr4",
+        "actionT": "d"
+      },
+      {
+        "name": "choice15",
+        "command": "/a/mycommand1873",
+        "actionT": "r"
+      }
+    ]
+  }
+]
