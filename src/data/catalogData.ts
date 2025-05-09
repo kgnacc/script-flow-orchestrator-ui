@@ -1,4 +1,22 @@
-import { Catalog } from '../types/catalog';
+import { Catalog, Script } from '../types/catalog';
+
+// Mock meta data for scripts to satisfy TypeScript requirements
+const createMockMeta = (name: string, category: string) => ({
+  type: 'cli',
+  name,
+  category,
+  platforms: ['Windows', 'Linux'],
+  description: `Description for ${name}`,
+  Owner: {
+    email: 'support@example.com',
+    project: 'Automation Tools',
+    team: ['Team A', 'Team B'],
+    teamID: 12345,
+    defineDgroupname: 'Group 1',
+    defineDgroupname2: 'Group 2'
+  },
+  path: 'root/path'
+});
 
 export const catalogData: Catalog = {
   categories: [
@@ -15,6 +33,7 @@ export const catalogData: Catalog = {
               name: 'Network Status Check',
               description: 'Check the status of network devices',
               category: 'monitoring',
+              meta: createMockMeta('Network Status Check', 'monitoring'),
               actions: [
                 {
                   id: 'check-status',
@@ -114,6 +133,7 @@ export const catalogData: Catalog = {
               name: 'Router Configuration',
               description: 'Configure network routers',
               category: 'configuration',
+              meta: createMockMeta('Router Configuration', 'configuration'),
               actions: [
                 {
                   id: 'update-config',
@@ -173,6 +193,7 @@ export const catalogData: Catalog = {
               name: 'Disk Cleanup',
               description: 'Clean up disk space on servers',
               category: 'maintenance',
+              meta: createMockMeta('Disk Cleanup', 'maintenance'),
               actions: [
                 {
                   id: 'analyze-space',
@@ -262,6 +283,7 @@ export const catalogData: Catalog = {
               name: 'Service Management',
               description: 'Manage system services',
               category: 'maintenance',
+              meta: createMockMeta('Service Management', 'maintenance'),
               actions: [
                 {
                   id: 'service-status',
@@ -336,6 +358,7 @@ export const catalogData: Catalog = {
           name: 'Security Scan',
           description: 'Scan systems for security vulnerabilities',
           category: 'security',
+          meta: createMockMeta('Security Scan', 'security'),
           actions: [
             {
               id: 'run-scan',
@@ -392,6 +415,7 @@ export const catalogData: Catalog = {
           name: 'Unix Commands',
           description: 'Execute common Unix commands on target systems',
           category: 'unix',
+          meta: createMockMeta('Unix Commands', 'unix'),
           actions: [
             {
               id: 'whoami',
