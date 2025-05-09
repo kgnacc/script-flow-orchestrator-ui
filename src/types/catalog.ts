@@ -1,4 +1,6 @@
 
+import { CatalogMeta } from './catalogJson';
+
 export interface ScriptParameter {
   id: string;
   name: string;
@@ -24,6 +26,7 @@ export interface ScriptAction {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   description: string;
   parameters: ScriptParameter[];
+  actionType?: 'r' | 'd';
 }
 
 export interface Script {
@@ -32,6 +35,7 @@ export interface Script {
   description: string;
   category: string;
   actions: ScriptAction[];
+  meta: CatalogMeta;
 }
 
 export interface Category {

@@ -89,6 +89,7 @@ const transformToScript = (item: CatalogItem): Script => {
   // Create action objects
   const actions: ScriptAction[] = choices.map(choice => {
     const command = item.commands.find(cmd => cmd.name === choice);
+    const actionType = command?.actionT || 'd';
     
     // Get parameters that should be shown for this action
     const parameters: ScriptParameter[] = [];
@@ -112,6 +113,33 @@ const transformToScript = (item: CatalogItem): Script => {
       }
     });
     
+    // Add additional fields for "r" type actions
+    if (actionType === 'r') {
+      parameters.push({
+        id: 'Ttype',
+        name: 'Ttype',
+        label: 'Transaction Type',
+        type: 'text',
+        required: true,
+      });
+      
+      parameters.push({
+        id: 'tID',
+        name: 'tID',
+        label: 'Transaction ID',
+        type: 'text',
+        required: true,
+      });
+      
+      parameters.push({
+        id: 'Tjustification',
+        name: 'Tjustification',
+        label: 'Justification',
+        type: 'textarea',
+        required: true,
+      });
+    }
+    
     return {
       id: choice,
       name: choice,
@@ -119,6 +147,7 @@ const transformToScript = (item: CatalogItem): Script => {
       method: 'POST',
       description: `Execute ${choice} command`,
       parameters,
+      actionType: actionType,
     };
   });
   
@@ -128,6 +157,7 @@ const transformToScript = (item: CatalogItem): Script => {
     description: item.meta.description,
     category: item.meta.category,
     actions,
+    meta: item.meta, // Store the full meta information
   };
 };
 

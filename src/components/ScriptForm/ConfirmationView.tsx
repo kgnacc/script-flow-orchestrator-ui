@@ -33,6 +33,15 @@ const ConfirmationView: React.FC<ConfirmationViewProps> = ({
       delete payload.endpoint;
       delete payload.method;
       
+      // For "r" type actions, ensure the transaction fields are included
+      if (action.actionType === 'r') {
+        // These fields should already be in the payload if they were filled in the form
+        // But we can double check here
+        if (!payload.Ttype || !payload.tID || !payload.Tjustification) {
+          console.warn('Missing required transaction fields for actionType "r"');
+        }
+      }
+      
       const response = await executeScript(formData.endpoint, formData.method, payload);
       setScriptOutput(response.output || null);
       onComplete();
@@ -72,6 +81,11 @@ const ConfirmationView: React.FC<ConfirmationViewProps> = ({
             <div>
               <h3 className="text-lg font-medium">Action: {formData.actionName}</h3>
               <p className="text-sm text-gray-500">Endpoint: {formData.endpoint}</p>
+              {action.actionType === 'r' && (
+                <p className="text-sm text-orange-500 font-medium mt-1">
+                  This is a restricted action that requires additional verification
+                </p>
+              )}
             </div>
             
             <div className="space-y-2">

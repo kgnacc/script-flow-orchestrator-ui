@@ -33,7 +33,7 @@ export interface FieldOption {
 export interface Command {
   name: string;
   command: string;
-  actionT: string;
+  actionT: "r" | "d";
 }
 
 export interface CatalogItem {
