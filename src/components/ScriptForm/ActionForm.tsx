@@ -88,7 +88,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
           break;
         case 'select':
           validator = z.string();
-          if (param.required) validator = validator.min(1, { message: 'Please select an option' });
+          if (param.required) validator = validator.min(1, { message: 'This field is required' });
           break;
         case 'multiselect':
           validator = z.array(z.string()).optional();
@@ -152,11 +152,18 @@ const ActionForm: React.FC<ActionFormProps> = ({
             control={control}
             defaultValue={parameter.default || ''}
             render={({ field }) => (
-              <Input 
-                {...field} 
-                placeholder={parameter.label}
-                className="w-full"
-              />
+              <>
+                <Input 
+                  {...field} 
+                  placeholder={parameter.label}
+                  className={`w-full ${errors[parameter.id] ? 'border-red-500' : ''}`}
+                />
+                {errors[parameter.id] && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors[parameter.id]?.message?.toString()}
+                  </p>
+                )}
+              </>
             )}
           />
         );
@@ -167,13 +174,20 @@ const ActionForm: React.FC<ActionFormProps> = ({
             control={control}
             defaultValue={parameter.default || ''}
             render={({ field }) => (
-              <Input 
-                {...field} 
-                type="number" 
-                placeholder={parameter.label}
-                className="w-full"
-                onChange={e => field.onChange(Number(e.target.value))}
-              />
+              <>
+                <Input 
+                  {...field} 
+                  type="number" 
+                  placeholder={parameter.label}
+                  className={`w-full ${errors[parameter.id] ? 'border-red-500' : ''}`}
+                  onChange={e => field.onChange(Number(e.target.value))}
+                />
+                {errors[parameter.id] && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors[parameter.id]?.message?.toString()}
+                  </p>
+                )}
+              </>
             )}
           />
         );
@@ -202,18 +216,25 @@ const ActionForm: React.FC<ActionFormProps> = ({
             control={control}
             defaultValue={parameter.default || ''}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={`Select ${parameter.label}`} />
-                </SelectTrigger>
-                <SelectContent>
-                  {parameter.options?.map(option => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className={`w-full ${errors[parameter.id] ? 'border-red-500' : ''}`}>
+                    <SelectValue placeholder={`Select ${parameter.label}`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {parameter.options?.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors[parameter.id] && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors[parameter.id]?.message?.toString()}
+                  </p>
+                )}
+              </>
             )}
           />
         );
@@ -240,6 +261,11 @@ const ActionForm: React.FC<ActionFormProps> = ({
                     </div>
                   ))}
                 </RadioGroup>
+                {errors[parameter.id] && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors[parameter.id]?.message?.toString()}
+                  </p>
+                )}
               </div>
             )}
           />
@@ -251,12 +277,19 @@ const ActionForm: React.FC<ActionFormProps> = ({
             control={control}
             defaultValue={parameter.default || ''}
             render={({ field }) => (
-              <Textarea 
-                {...field} 
-                placeholder={parameter.label}
-                className="w-full"
-                rows={2} // Reduced from 4 to 2 for better space usage
-              />
+              <>
+                <Textarea 
+                  {...field} 
+                  placeholder={parameter.label}
+                  className={`w-full ${errors[parameter.id] ? 'border-red-500' : ''}`}
+                  rows={2} // Reduced from 4 to 2 for better space usage
+                />
+                {errors[parameter.id] && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors[parameter.id]?.message?.toString()}
+                  </p>
+                )}
+              </>
             )}
           />
         );
@@ -294,6 +327,11 @@ const ActionForm: React.FC<ActionFormProps> = ({
                   ))}
                 </SelectContent>
               </Select>
+              {!selectedAction && (
+                <p className="text-xs text-red-500 mt-1">
+                  Please select an action
+                </p>
+              )}
             </div>
 
             {/* Team dropdown */}
@@ -306,7 +344,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
                 onValueChange={setSelectedTeam}
                 value={selectedTeam}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={`w-full ${!selectedTeam && 'border-red-500'}`}>
                   <SelectValue placeholder="Select team" />
                 </SelectTrigger>
                 <SelectContent>
@@ -317,6 +355,11 @@ const ActionForm: React.FC<ActionFormProps> = ({
                   ))}
                 </SelectContent>
               </Select>
+              {!selectedTeam && (
+                <p className="text-xs text-red-500 mt-1">
+                  Please select a team
+                </p>
+              )}
             </div>
 
             {/* Project dropdown */}
@@ -329,7 +372,7 @@ const ActionForm: React.FC<ActionFormProps> = ({
                 onValueChange={setSelectedProject}
                 value={selectedProject}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={`w-full ${!selectedProject && 'border-red-500'}`}>
                   <SelectValue placeholder="Select project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -340,6 +383,11 @@ const ActionForm: React.FC<ActionFormProps> = ({
                   ))}
                 </SelectContent>
               </Select>
+              {!selectedProject && (
+                <p className="text-xs text-red-500 mt-1">
+                  Please select a project
+                </p>
+              )}
             </div>
           </div>
         </CardContent>
@@ -357,15 +405,10 @@ const ActionForm: React.FC<ActionFormProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                   {selectedAction.parameters.map(param => (
                     <div key={param.id} className="space-y-1">
-                      <Label htmlFor={param.id} className="text-xs">
-                        {param.label} {param.required && <span className="text-red-500">*</span>}
+                      <Label htmlFor={param.id} className="text-xs flex items-center">
+                        {param.label} {param.required && <span className="text-red-500 ml-1">*</span>}
                       </Label>
                       {renderParameterInput(param)}
-                      {errors[param.id] && (
-                        <p className="text-xs text-red-500">
-                          {errors[param.id]?.message?.toString()}
-                        </p>
-                      )}
                     </div>
                   ))}
                 </div>

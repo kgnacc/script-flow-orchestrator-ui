@@ -1,4 +1,3 @@
-
 import { CatalogData, CatalogItem } from '@/types/catalogJson';
 import { Catalog, Category, Script, ScriptAction, ScriptParameter } from '@/types/catalog';
 
@@ -119,8 +118,13 @@ const transformToScript = (item: CatalogItem): Script => {
         id: 'Ttype',
         name: 'Ttype',
         label: 'Transaction Type',
-        type: 'text',
+        type: 'select',
         required: true,
+        options: [
+          { label: 'Type A', value: 'typeA' },
+          { label: 'Type B', value: 'typeB' },
+          { label: 'Type C', value: 'typeC' },
+        ]
       });
       
       parameters.push({
