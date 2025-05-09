@@ -6,7 +6,7 @@ import MetaInfo from './MetaInfo';
 import ActionForm from './ActionForm';
 import ConfirmationView from './ConfirmationView';
 import CLIOutput from '../CLIOutput';
-import { Server, Terminal } from 'lucide-react';
+import { Server, Terminal, Users, FolderKanban } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Step definition
@@ -17,6 +17,9 @@ const ScriptForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<FormStep>('info');
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [isOutputOpen, setIsOutputOpen] = useState(false);
+  // Added new state for team and project
+  const [selectedTeam, setSelectedTeam] = useState('');
+  const [selectedProject, setSelectedProject] = useState('');
 
   if (!selectedScript) {
     return (
@@ -30,7 +33,11 @@ const ScriptForm: React.FC = () => {
   }
 
   const handleActionFormNext = (data: Record<string, any>) => {
-    setFormData(data);
+    setFormData({
+      ...data,
+      team: selectedTeam,
+      project: selectedProject,
+    });
     setCurrentStep('confirm');
   };
 
@@ -93,7 +100,14 @@ const ScriptForm: React.FC = () => {
         </TabsContent>
         
         <TabsContent value="action" className="mt-0">
-          <ActionForm script={selectedScript} onNext={handleActionFormNext} />
+          <ActionForm 
+            script={selectedScript} 
+            onNext={handleActionFormNext}
+            selectedTeam={selectedTeam}
+            setSelectedTeam={setSelectedTeam}
+            selectedProject={selectedProject}
+            setSelectedProject={setSelectedProject}
+          />
           <div className="mt-4 flex justify-start">
             <Button 
               variant="outline"

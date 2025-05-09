@@ -16,13 +16,38 @@ import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Users, FolderKanban, PlayCircle } from 'lucide-react';
 
 interface ActionFormProps {
   script: Script;
   onNext: (formData: Record<string, any>) => void;
+  selectedTeam: string;
+  setSelectedTeam: (team: string) => void;
+  selectedProject: string;
+  setSelectedProject: (project: string) => void;
 }
 
-const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
+// Mock data for teams and projects
+const mockTeams = [
+  { value: 'team1', label: 'DevOps Team' },
+  { value: 'team2', label: 'Frontend Team' },
+  { value: 'team3', label: 'Backend Team' }
+];
+
+const mockProjects = [
+  { value: 'proj1', label: 'Website Migration' },
+  { value: 'proj2', label: 'Cloud Infrastructure' },
+  { value: 'proj3', label: 'Database Upgrade' }
+];
+
+const ActionForm: React.FC<ActionFormProps> = ({ 
+  script, 
+  onNext, 
+  selectedTeam, 
+  setSelectedTeam, 
+  selectedProject, 
+  setSelectedProject 
+}) => {
   const { selectedAction, setSelectedAction } = useAppContext();
   const [formData, setFormData] = useState<Record<string, any>>({});
   const isMobile = useIsMobile();
@@ -94,6 +119,16 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
   const onSubmit = (data: Record<string, any>) => {
     if (!selectedAction) {
       toast.error("Please select an action before proceeding");
+      return;
+    }
+    
+    if (!selectedTeam) {
+      toast.error("Please select a team");
+      return;
+    }
+
+    if (!selectedProject) {
+      toast.error("Please select a project");
       return;
     }
     
@@ -234,41 +269,95 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
     <div>
       <Card className="mb-4">
         <CardHeader className="py-3">
-          <CardTitle>Select Action</CardTitle>
-          <CardDescription>Choose the action to perform with this script</CardDescription>
+          <CardTitle className="text-base">Select Context</CardTitle>
         </CardHeader>
         <CardContent className="py-2">
-          <Select 
-            onValueChange={handleActionChange}
-            value={selectedAction?.id || ''}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select an action" />
-            </SelectTrigger>
-            <SelectContent>
-              {script.actions.map(action => (
-                <SelectItem key={action.id} value={action.id}>
-                  {action.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            {/* Action dropdown */}
+            <div className="space-y-1">
+              <div className="flex items-center text-sm mb-1">
+                <PlayCircle className="h-4 w-4 mr-1" />
+                <span>Action</span>
+              </div>
+              <Select 
+                onValueChange={handleActionChange}
+                value={selectedAction?.id || ''}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select an action" />
+                </SelectTrigger>
+                <SelectContent>
+                  {script.actions.map(action => (
+                    <SelectItem key={action.id} value={action.id}>
+                      {action.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Team dropdown */}
+            <div className="space-y-1">
+              <div className="flex items-center text-sm mb-1">
+                <Users className="h-4 w-4 mr-1" />
+                <span>Team</span>
+              </div>
+              <Select 
+                onValueChange={setSelectedTeam}
+                value={selectedTeam}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select team" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockTeams.map(team => (
+                    <SelectItem key={team.value} value={team.value}>
+                      {team.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Project dropdown */}
+            <div className="space-y-1">
+              <div className="flex items-center text-sm mb-1">
+                <FolderKanban className="h-4 w-4 mr-1" />
+                <span>Project</span>
+              </div>
+              <Select 
+                onValueChange={setSelectedProject}
+                value={selectedProject}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select project" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockProjects.map(project => (
+                    <SelectItem key={project.value} value={project.value}>
+                      {project.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {selectedAction && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Card>
-            <CardHeader className="py-3">
-              <CardTitle>{selectedAction.name} Parameters</CardTitle>
-              <CardDescription>{selectedAction.description}</CardDescription>
+            <CardHeader className="py-2">
+              <CardTitle className="text-base">{selectedAction.name} Parameters</CardTitle>
+              <CardDescription className="text-xs">{selectedAction.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[calc(100vh-28rem)] pr-4">
-                <div className={`grid ${selectedAction.parameters.length > 3 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
+              <ScrollArea className="h-[calc(100vh-23rem)] pr-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                   {selectedAction.parameters.map(param => (
                     <div key={param.id} className="space-y-1">
-                      <Label htmlFor={param.id} className="text-sm">
+                      <Label htmlFor={param.id} className="text-xs">
                         {param.label} {param.required && <span className="text-red-500">*</span>}
                       </Label>
                       {renderParameterInput(param)}
@@ -284,7 +373,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ script, onNext }) => {
               <Button 
                 type="submit" 
                 className="w-full mt-4"
-                disabled={!isValid || !selectedAction}
+                disabled={!isValid || !selectedAction || !selectedTeam || !selectedProject}
               >
                 Continue
               </Button>
